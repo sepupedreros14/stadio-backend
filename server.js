@@ -10,7 +10,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 4000;
 const CALCOM_API_KEY = process.env.cal_live_5867fc115e4283045292fb763048b3c2;
-const EVENT_TYPE_ID = process.env.EVENT_TYPE_ID;
+const EVENT_TYPE_ID = process.env.3220000;
 const DEFAULT_TZ = process.env.DEFAULT_TZ || "America/Santiago";
 const CAL_BASE = "https://api.cal.com/v1";
 
