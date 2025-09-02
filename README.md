@@ -14,5 +14,5 @@ Configurar en Render:
 
 PORT=10000
 CALCOM_API_KEY=cal_live_5867fc115e4283045292fb763048b3c2
-EVENT_TYPE_ID=tu_event_type_id
+EVENT_TYPE_ID=3220000
 DEFAULT_TZ=America/Santiago
