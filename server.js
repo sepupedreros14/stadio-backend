@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 dotenv.config();
+console.log("DEBUG CALCOM_API_KEY:", process.env.CALCOM_API_KEY ? "✅ existe" : "❌ no existe");
 
 const app = express();
 app.use(cors());
