@@ -111,3 +111,10 @@ app.post("/reserve", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Backend listening on http://localhost:${PORT}`);
 });
+
+app.get("/debug-env", (_req, res) => {
+  res.json({
+    CALCOM_API_KEY: CALCOM_API_KEY ? `✅ length ${CALCOM_API_KEY.length}` : "❌ missing",
+    EVENT_TYPE_ID,
+    DEFAULT_TZ,
+  });
