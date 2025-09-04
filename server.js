@@ -70,7 +70,7 @@ app.get("/availability", async (req, res) => {
       timezone: tz,
     });
 
-    const api = await calFetch(`/availability?${q.toString()}`);
+const api = await calFetch(`/event-types/${EVENT_TYPE_ID}/slots?date=${date}&timezone=${tz}`);
 
     const slots = [];
     const rawSlots = api.slots || api.availableSlots || api.data?.slots || [];
