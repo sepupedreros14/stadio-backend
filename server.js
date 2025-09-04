@@ -119,3 +119,22 @@ app.post("/reserve", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Backend listening on http://localhost:${PORT}`);
 });
+  // 🔎 Debug extra para ver qué estamos enviando
+  console.log("DEBUG fetch →", `${CAL_BASE}${path}`);
+  console.log("DEBUG headers →", headers);
+
+  const res = await fetch(`${CAL_BASE}${path}`, { ...init, headers });
+  const text = await res.text();
+  let json;
+  try {
+    json = text ? JSON.parse(text) : {};
+  } catch {
+    json = { raw: text };
+  }
+  if (!res.ok) {
+    const msg = json?.message || json?.error || `Cal.com error ${res.status}`;
+    throw new Error(msg);
+  }
+  return json;
+}
+});
