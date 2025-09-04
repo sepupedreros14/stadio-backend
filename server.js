@@ -21,6 +21,11 @@ async function calFetch(path, init = {}) {
     "Content-Type": "application/json",
     ...(init.headers || {}),
   };
+
+  // 🔎 Debug extra para confirmar qué enviamos
+  console.log("DEBUG fetch →", `${CAL_BASE}${path}`);
+  console.log("DEBUG headers →", headers);
+
   const res = await fetch(`${CAL_BASE}${path}`, { ...init, headers });
   const text = await res.text();
   let json;
@@ -41,16 +46,18 @@ app.get("/health", (_req, res) => {
   res.send("ok");
 });
 
-// Debug para confirmar envs
+// Debug de variables de entorno
 app.get("/debug-env", (_req, res) => {
   res.json({
-    CALCOM_API_KEY: CALCOM_API_KEY ? `✅ length ${CALCOM_API_KEY.length}` : "❌ missing",
+    CALCOM_API_KEY: CALCOM_API_KEY
+      ? `✅ length ${CALCOM_API_KEY.length}`
+      : "❌ missing",
     EVENT_TYPE_ID,
     DEFAULT_TZ,
   });
 });
 
-// Disponibilidad
+// Endpoint de disponibilidad
 app.get("/availability", async (req, res) => {
   try {
     const date = String(req.query.date || "").trim();
@@ -83,16 +90,20 @@ app.get("/availability", async (req, res) => {
     return res.json({ eventTypeId: EVENT_TYPE_ID, date, timezone: tz, slots });
   } catch (err) {
     console.error("availability error:", err);
-    return res.status(500).json({ error: String(err.message || err) });
+    return res
+      .status(500)
+      .json({ error: String(err.message || err) });
   }
 });
 
-// Crear reserva
+// Endpoint para crear reserva
 app.post("/reserve", async (req, res) => {
   try {
     const { name, email, start, end, notes } = req.body || {};
     if (!name || !email || !start || !end) {
-      return res.status(400).json({ error: "Faltan name, email, start o end" });
+      return res
+        .status(400)
+        .json({ error: "Faltan name, email, start o end" });
     }
 
     const payload = {
@@ -112,29 +123,12 @@ app.post("/reserve", async (req, res) => {
     return res.json({ status: "ok", booking });
   } catch (err) {
     console.error("reserve error:", err);
-    return res.status(500).json({ error: String(err.message || err) });
+    return res
+      .status(500)
+      .json({ error: String(err.message || err) });
   }
 });
 
 app.listen(PORT, () => {
   console.log(`✅ Backend listening on http://localhost:${PORT}`);
-});
-  // 🔎 Debug extra para ver qué estamos enviando
-  console.log("DEBUG fetch →", `${CAL_BASE}${path}`);
-  console.log("DEBUG headers →", headers);
-
-  const res = await fetch(`${CAL_BASE}${path}`, { ...init, headers });
-  const text = await res.text();
-  let json;
-  try {
-    json = text ? JSON.parse(text) : {};
-  } catch {
-    json = { raw: text };
-  }
-  if (!res.ok) {
-    const msg = json?.message || json?.error || `Cal.com error ${res.status}`;
-    throw new Error(msg);
-  }
-  return json;
-}
 });
